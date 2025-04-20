@@ -10,6 +10,7 @@ export default function SKCTTrainer() {
   const [timerRunning, setTimerRunning] = useState(false);
   const canvasRef = useRef(null);
   const drawingRef = useRef(false);
+  const calcInputRef = useRef(null);
 
   useEffect(() => {
     let timer;
@@ -80,10 +81,11 @@ export default function SKCTTrainer() {
   };
 
   const handleCalcButton = (val) => {
+    calcInputRef.current?.focus();
     if (val === "C") {
       setCalcInput("");
       setCalcHistory(0);
-    } else if (val === "CE") {
+    } else if (val === "CE" || val === "←") {
       setCalcInput((prev) => prev.slice(0, -1));
     } else if (val === "√") {
       try {
@@ -93,8 +95,6 @@ export default function SKCTTrainer() {
       } catch {
         setCalcInput("Error");
       }
-    } else if (val === "←") {
-      setCalcInput((prev) => prev.slice(0, -1));
     } else if (val === "=") {
       evaluateCalc();
     } else {
@@ -151,6 +151,7 @@ export default function SKCTTrainer() {
       <div className="flex-[4] border-t p-2">
         <input
           type="text"
+          ref={calcInputRef}
           value={calcInput}
           onChange={(e) => setCalcInput(e.target.value)}
           onKeyDown={handleKeyDown}
